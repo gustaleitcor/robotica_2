@@ -1,6 +1,6 @@
 <root main_tree_to_execute="MainTree">
 	<BehaviorTree ID="MainTree">
-		<RecoveryNode name="NavigateRecovery" number_of_retries="5">
+		<RecoveryNode name="NavigateRecovery" number_of_retries="10">
 			<PipelineSequence name="NavigateWithReplanning">
 				<ControllerSelector
                     selected_controller="{selected_controller}"
@@ -13,7 +13,7 @@
                     topic_name="planner_selector"
                 />
 				<RateController hz="2.0">
-					<RecoveryNode name="ComputePathRecovery" number_of_retries="3">
+					<RecoveryNode name="ComputePathRecovery" number_of_retries="20">
 						<ComputePathToPose
                             goal="{goal}"
                             path="{path}"
@@ -25,7 +25,7 @@
                         />
 					</RecoveryNode>
 				</RateController>
-				<RecoveryNode name="FollowPathRecovery" number_of_retries="3">
+				<RecoveryNode name="FollowPathRecovery" number_of_retries="20">
 					<FollowPath path="{path}" controller_id="{selected_controller}" />
 					<ClearEntireCostmap
                         name="ClearLocalCostmap"

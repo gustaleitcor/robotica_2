@@ -46,7 +46,7 @@ def generate_launch_description() -> LaunchDescription:
         "controller_server",
         "smoother_server",
         "planner_server",
-        "route_server",
+        # "route_server",
         "behavior_server",
         "velocity_smoother",
         "collision_monitor",
@@ -193,17 +193,17 @@ def generate_launch_description() -> LaunchDescription:
                 arguments=["--ros-args", "--log-level", log_level],
                 remappings=remappings,
             ),
-            Node(
-                package="nav2_route",
-                executable="route_server",
-                name="route_server",
-                output="screen",
-                respawn=use_respawn,
-                respawn_delay=3.0,
-                parameters=[configured_params, {"graph_filepath": graph_filepath}],
-                arguments=["--ros-args", "--log-level", log_level],
-                remappings=remappings,
-            ),
+            # Node(
+            #     package="nav2_route",
+            #     executable="route_server",
+            #     name="route_server",
+            #     output="screen",
+            #     respawn=use_respawn,
+            #     respawn_delay=3.0,
+            #     parameters=[configured_params, {"graph_filepath": graph_filepath}],
+            #     arguments=["--ros-args", "--log-level", log_level],
+            #     remappings=remappings,
+            # ),
             Node(
                 package="nav2_behaviors",
                 executable="behavior_server",
@@ -312,19 +312,19 @@ def generate_launch_description() -> LaunchDescription:
                             {"use_intra_process_comms": use_intra_process_comms}
                         ],
                     ),
-                    ComposableNode(
-                        package="nav2_route",
-                        plugin="nav2_route::RouteServer",
-                        name="route_server",
-                        parameters=[
-                            configured_params,
-                            {"graph_filepath": graph_filepath},
-                        ],
-                        remappings=remappings,
-                        extra_arguments=[
-                            {"use_intra_process_comms": use_intra_process_comms}
-                        ],
-                    ),
+                    # ComposableNode(
+                    #     package="nav2_route",
+                    #     plugin="nav2_route::RouteServer",
+                    #     name="route_server",
+                    #     parameters=[
+                    #         configured_params,
+                    #         {"graph_filepath": graph_filepath},
+                    #     ],
+                    #     remappings=remappings,
+                    #     extra_arguments=[
+                    #         {"use_intra_process_comms": use_intra_process_comms}
+                    #     ],
+                    # ),
                     ComposableNode(
                         package="nav2_behaviors",
                         plugin="behavior_server::BehaviorServer",
