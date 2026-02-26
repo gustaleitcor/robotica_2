@@ -1,0 +1,16 @@
+digraph G {
+"base_link" -> "odometry_ground_truth_link"[label=" Broadcaster: default_authority\nAverage rate: 10.197\nBuffer length: 5.1\nMost recent transform: 1771982902.034332\nOldest transform: 1771982896.934662\n"];
+"odom" -> "base_link"[label=" Broadcaster: default_authority\nAverage rate: 20.244\nBuffer length: 4.1\nMost recent transform: 493.722\nOldest transform: 489.622\n"];
+"base_link" -> "wheel_left_back_link"[label=" Broadcaster: default_authority\nAverage rate: 10.197\nBuffer length: 5.1\nMost recent transform: 1771982902.034332\nOldest transform: 1771982896.934662\n"];
+"base_link" -> "wheel_left_front_link"[label=" Broadcaster: default_authority\nAverage rate: 10.197\nBuffer length: 5.1\nMost recent transform: 1771982902.034332\nOldest transform: 1771982896.934662\n"];
+"base_link" -> "wheel_right_back_link"[label=" Broadcaster: default_authority\nAverage rate: 10.197\nBuffer length: 5.1\nMost recent transform: 1771982902.034332\nOldest transform: 1771982896.934662\n"];
+"base_link" -> "wheel_right_front_link"[label=" Broadcaster: default_authority\nAverage rate: 10.197\nBuffer length: 5.1\nMost recent transform: 1771982902.034332\nOldest transform: 1771982896.934662\n"];
+"base_link" -> "back_shell_link"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"base_link" -> "base_footprint"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"base_link" -> "imu_link"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"base_link" -> "lidar_link"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 1771982902.0866437"[ shape=plaintext ] ;
+}->"odom";
+}

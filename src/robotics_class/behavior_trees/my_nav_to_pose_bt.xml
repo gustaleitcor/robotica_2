@@ -1,0 +1,101 @@
+<root main_tree_to_execute="MainTree">
+
+  <BehaviorTree ID="MainTree">
+
+    <!-- Main navigation with limited retries -->
+    <RecoveryNode name="NavigateRecovery" number_of_retries="3">
+
+      <PipelineSequence name="NavigateWithReplanning">
+
+        <!-- Select planner and controller -->
+        <ControllerSelector
+                    selected_controller="{selected_controller}"
+                    default_controller="FollowPath"
+                    topic_name="controller_selector"
+                />
+
+        <PlannerSelector
+                    selected_planner="{selected_planner}"
+                    default_planner="GridBased"
+                    topic_name="planner_selector"
+                />
+
+
+        <!-- Replan periodically -->
+        <RateController hz="1.0">
+          <RecoveryNode name="ComputePathRecovery" number_of_retries="2">
+
+            <ComputePathToPose
+                            goal="{goal}"
+                            path="{path}"
+                            planner_id="{selected_planner}"
+                        />
+
+            <ClearEntireCostmap
+                            name="ClearGlobalCostmap"
+                            service_name="global_costmap/clear_entirely_global_costmap"
+                        />
+
+          </RecoveryNode>
+        </RateController>
+
+
+        <!-- Follow path and monitor -->
+        <RecoveryNode name="FollowPathRecovery" number_of_retries="2">
+
+          <FollowPath path="{path}" controller_id="{selected_controller}" />
+
+          <ClearEntireCostmap
+                        name="ClearLocalCostmap"
+                        service_name="local_costmap/clear_entirely_local_costmap"
+                    />
+
+        </RecoveryNode>
+
+      </PipelineSequence>
+
+
+      <!-- Recovery behaviors -->
+      <ReactiveFallback name="RecoveryFallback">
+
+        <!-- Exit recovery if goal changes -->
+        <GoalUpdated />
+
+        <RoundRobin name="RecoveryActions">
+
+          <!-- Clear costmaps first -->
+          <Sequence name="CostmapClearing">
+
+            <ClearEntireCostmap
+                            name="ClearLocalCostmapRecovery"
+                            service_name="local_costmap/clear_entirely_local_costmap"
+                        />
+
+            <ClearEntireCostmap
+                            name="ClearGlobalCostmapRecovery"
+                            service_name="global_costmap/clear_entirely_global_costmap"
+                        />
+
+          </Sequence>
+
+
+          <!-- Try rotating to find free space -->
+          <Spin spin_dist="1.57" />
+
+
+          <!-- Small pause -->
+          <Wait wait_duration="1.0" />
+
+
+          <!-- Optional small backup (safer distance) -->
+          <BackUp backup_dist="0.25" backup_speed="0.10" />
+
+        </RoundRobin>
+
+      </ReactiveFallback>
+
+    </RecoveryNode>
+
+  </BehaviorTree>
+
+</root>
