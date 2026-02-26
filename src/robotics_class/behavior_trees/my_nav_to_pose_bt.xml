@@ -3,7 +3,7 @@
   <BehaviorTree ID="MainTree">
 
     <!-- Main navigation with limited retries -->
-    <RecoveryNode name="NavigateRecovery" number_of_retries="3">
+    <RecoveryNode name="NavigateRecovery" number_of_retries="5">
 
       <PipelineSequence name="NavigateWithReplanning">
 
@@ -20,10 +20,9 @@
                     topic_name="planner_selector"
                 />
 
-
         <!-- Replan periodically -->
-        <RateController hz="1.0">
-          <RecoveryNode name="ComputePathRecovery" number_of_retries="2">
+        <RateController hz="2.0">
+          <RecoveryNode name="ComputePathRecovery" number_of_retries="3">
 
             <ComputePathToPose
                             goal="{goal}"
@@ -39,9 +38,8 @@
           </RecoveryNode>
         </RateController>
 
-
         <!-- Follow path and monitor -->
-        <RecoveryNode name="FollowPathRecovery" number_of_retries="2">
+        <RecoveryNode name="FollowPathRecovery" number_of_retries="3">
 
           <FollowPath path="{path}" controller_id="{selected_controller}" />
 
@@ -53,7 +51,6 @@
         </RecoveryNode>
 
       </PipelineSequence>
-
 
       <!-- Recovery behaviors -->
       <ReactiveFallback name="RecoveryFallback">
@@ -78,17 +75,15 @@
 
           </Sequence>
 
-
           <!-- Try rotating to find free space -->
-          <Spin spin_dist="1.57" />
-
+          <Spin spin_dist="3.14" />
 
           <!-- Small pause -->
           <Wait wait_duration="1.0" />
-
+          <Wait wait_duration="0.5" />
 
           <!-- Optional small backup (safer distance) -->
-          <BackUp backup_dist="0.25" backup_speed="0.10" />
+          <BackUp backup_dist="0.5" backup_speed="0.15" />
 
         </RoundRobin>
 

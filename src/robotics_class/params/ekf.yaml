@@ -1,14 +1,15 @@
 ekf_filter_node:
   ros__parameters:
     frequency: 30.0
+    sensor_timeout: 0.1 # optional but good to have
     two_d_mode: true
     publish_tf: true
-
     map_frame: map
     odom_frame: odom
     base_link_frame: base_link
     world_frame: odom
 
+    # Wheel odometry input
     odom0: jetauto/odometry/unfiltered
     odom0_config:
       [
@@ -28,7 +29,11 @@ ekf_filter_node:
         false,
         false,
       ]
+    odom0_differential: false
+    odom0_queue_size: 10
+    odom0_nodelay: false
 
+    # IMU input
     imu0: jetauto/imu/data
     imu0_config:
       [
@@ -48,7 +53,11 @@ ekf_filter_node:
         false,
         false,
       ]
+    imu0_differential: true # often helpful for IMU yaw drift
+    imu0_remove_gravitational_acceleration: true
+    imu0_queue_size: 10
+    imu0_nodelay: false
 
-map_server:
-  topic_name: "map"
-  frame_id: "map"
+    # Optional: output diagnostics
+    publish_acceleration: false
+    debug: false
